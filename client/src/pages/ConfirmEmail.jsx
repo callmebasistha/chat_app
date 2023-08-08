@@ -16,6 +16,7 @@ import { useState } from "react";
 import axios from "axios";
 import { URL } from "../utils/Constants";
 import { Divider, IconButton, Stack } from "@mui/material";
+import logo from "../assets/images/apple-touch-icon.png";
 
 function Copyright(props) {
   return (
@@ -62,10 +63,8 @@ const ConfirmEmail = (props) => {
             alignItems: "center",
           }}
         >
-          <Stack direction={"row"} alignItems={"center"}>
-            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-              <LockOutlinedIcon />
-            </Avatar>
+          <Stack direction={"row"} alignItems={"center"} spacing={1} margin={1}>
+            <img src={logo} style={{ width: "42px" }} />
             <Typography component="h1" variant="h6">
               Bolamna
             </Typography>

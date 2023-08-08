@@ -19,6 +19,7 @@ import { useState } from "react";
 import axios from "axios";
 import { URL } from "../utils/Constants";
 import { useNavigate } from "react-router-dom";
+import logo from "../assets/images/apple-touch-icon.png";
 
 function Copyright(props) {
   return (
@@ -76,10 +77,8 @@ const Register = () => {
             alignItems: "center",
           }}
         >
-          <Stack direction={"row"} alignItems={"center"}>
-            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-              <LockOutlinedIcon />
-            </Avatar>
+          <Stack direction={"row"} alignItems={"center"} spacing={1} margin={1}>
+            <img src={logo} style={{ width: "42px" }} />
             <Typography component="h1" variant="h6">
               Bolamna
             </Typography>
@@ -106,15 +105,7 @@ const Register = () => {
               onChange={(e) => handelEmailChange(e)}
               autoFocus
             />
-            <Stack
-              direction={"row"}
-              justifyContent={"space-between"}
-              alignItems={"center"}
-            >
-              <Divider />
-              <Typography variant="subtitle">or</Typography>
-              <Divider />
-            </Stack>
+            <Divider sx={{ mt: 2, mb: 2 }} />
             <Button type="submit" fullWidth variant="outlined" sx={{ mt: 1 }}>
               <Stack>
                 <IconButton>
@@ -136,25 +127,22 @@ const Register = () => {
               </Stack>
               Sign in with Apple
             </Button>
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign in with email
+              Continue
             </Button>
-            <Grid container>
-              <Grid item>
-                <Link href="/login" variant="body2">
-                  Already have an account? Sign in
-                </Link>
-              </Grid>
-            </Grid>
+            <Stack direction={"column"} alignItems={"center"}>
+              <Typography variant="subtitle">
+                Already have an account?
+              </Typography>
+              <Link href="/login" variant="body2">
+                Sign in to an existing workspace
+              </Link>
+            </Stack>
           </Box>
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />

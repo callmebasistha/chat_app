@@ -2,10 +2,17 @@ const pool = require("../../config/database");
 const emailSender = require("../../config/emailSender");
 const helper = require("../../config/helper");
 const otpService = require("../otps/otpService");
+const db = require("../../index");
 
+const User = db.users;
+console.log("User : " + User);
 module.exports = {
-  insert: (data, callBack) => {
+  insert: async (data, callBack) => {
     let insertedUserId = "";
+    let modelData = {
+      email: data.email,
+    };
+    const user = await User.create(modelData);
     pool.query(
       `insert into user(email) values(?)`,
       [data.email],
