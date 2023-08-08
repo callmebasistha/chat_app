@@ -4,6 +4,7 @@ module.exports = {
     let date = new Date();
     let expiryDate = new Date();
     expiryDate.setTime(date.getTime() + 3 * 60 * 1000);
+    debugger;
     pool.query(
       `insert into otp (token,user_id, expiry)
         values(?,?,?)

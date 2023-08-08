@@ -12,11 +12,8 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Divider, IconButton, Stack, SvgIcon } from "@mui/material";
-// import { ReactComponent as Logo } from "../assets/logo.svg";
-import logo from "../assets/images/apple-touch-icon.png";
-import GoogleIcon from "@mui/icons-material/Google";
-import AppleIcon from "@mui/icons-material/Apple";
+import { SvgIcon } from "@mui/material";
+import { ReactComponent as Logo } from "../assets/logo.svg";
 
 function Copyright(props) {
   return (
@@ -57,17 +54,11 @@ const Login = () => {
             alignItems: "center",
           }}
         >
-          <Stack direction={"row"} alignItems={"center"} spacing={1}>
-            <img src={logo} style={{ width: "42px", margin: "2vh" }} />
-            <Typography component="h1" variant="h6">
-              Bolamna
-            </Typography>
-          </Stack>
-          <Typography component="h1" variant="h4">
-            Sign in to Bolamna
-          </Typography>
-          <Typography component="h1" variant="subtitle2" sx={{ mt: 1 }}>
-            We suggest using the email address you use at work.
+          <SvgIcon viewBox="0 0 150 124">
+            <Logo />
+          </SvgIcon>
+          <Typography component="h1" variant="h5">
+            Sign in
           </Typography>
           <Box
             component="form"
@@ -75,37 +66,27 @@ const Login = () => {
             noValidate
             sx={{ mt: 1 }}
           >
-            <Button type="submit" fullWidth variant="outlined" sx={{ mt: 1 }}>
-              <Stack>
-                <IconButton>
-                  <GoogleIcon color="primary" />
-                </IconButton>
-              </Stack>
-              Sign in with Google
-            </Button>{" "}
-            <Button
-              type="submit"
-              fullWidth
-              variant="outlined"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              <Stack>
-                <IconButton>
-                  <AppleIcon color="primary" />
-                </IconButton>
-              </Stack>
-              Sign in with Apple
-            </Button>
-            <Divider sx={{ mt: 2, mb: 2 }} />
             <TextField
               margin="normal"
               fullWidth
               id="email"
               label="Email Address"
-              autoComplete="email"
               name="email"
-              // onChange={(e) => handelEmailChange(e)}
+              autoComplete="email"
               autoFocus
+            />
+            <TextField
+              margin="normal"
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+            />
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
             />
             <Button
               type="submit"
@@ -113,7 +94,7 @@ const Login = () => {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In with email
+              Sign In
             </Button>
             <Grid container>
               <Grid item xs>
