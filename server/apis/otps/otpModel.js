@@ -1,16 +1,26 @@
-module.exports = (sequelize, DataTypes) => {
+const { DataTypes } = require("sequelize");
+
+module.exports = (sequelize) => {
   const Otp = sequelize.define(
     "otp",
     {
       token: {
         type: DataTypes.STRING,
       },
-      userId: DataTypes.INTEGER,
+      userId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: "user",
+          key: "id",
+        },
+      },
       expiry: DataTypes.DATE,
     },
     {
       tableName: "otp",
-    }
+    },
+    { underscored: true }
   );
+  Otp.removeAttribute("id");
   return Otp;
 };

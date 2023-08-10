@@ -1,6 +1,6 @@
 const userService = require("./userService");
 
-module.exports.insert = (req, res, next) => {
+let insert = (req, res) => {
   const body = req.body;
   userService.insert(body, (err, result) => {
     if (err) {
@@ -16,3 +16,5 @@ module.exports.insert = (req, res, next) => {
     });
   });
 };
+
+module.exports = { insert };

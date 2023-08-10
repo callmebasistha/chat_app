@@ -1,4 +1,6 @@
-module.exports = (sequelize, DataTypes) => {
+const { DataTypes } = require("sequelize");
+
+module.exports = (sequelize) => {
   const User = sequelize.define(
     "user",
     {
@@ -10,7 +12,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       tableName: "user",
-    }
+    },
+    { underscored: true }
   );
   return User;
 };

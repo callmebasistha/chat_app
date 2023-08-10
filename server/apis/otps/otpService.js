@@ -1,19 +1,24 @@
-const pool = require("../../config/database");
-module.exports = {
-  insert: (data) => {
-    let date = new Date();
-    let expiryDate = new Date();
-    expiryDate.setTime(date.getTime() + 3 * 60 * 1000);
-    pool.query(
-      `insert into otp (token,user_id, expiry)
-        values(?,?,?)
-        `,
-      [data.otp, data.userId, expiryDate],
-      (error, results) => {
-        if (error) {
-          console.log(error);
-        }
-      }
-    );
-  },
+const db = require("../../config/sequelizeConfig");
+
+const Otp = db.otps;
+const insert = async (data) => {
+  try {
+    await Otp.create(data);
+  } catch (err) {
+    throw err;
+  }
 };
+
+const verifyOtp = async (data, callBack) => {
+  try {
+    let existingToken = Otp.findOne({ where: { userId: data.userId } });
+    if (existingToken === null || existingToken.expiry > new Date()) {
+      return callBack("Otp verification Failed", null);
+    }
+    return callBack(null, existingToken.dataValues);
+  } catch (err) {
+    callBack(err);
+  }
+};
+
+module.exports = { insert, verifyOtp };
