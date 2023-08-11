@@ -1,5 +1,5 @@
 import React, { Component, Suspense, lazy } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Landing from "./pages/Landing";
@@ -24,6 +24,7 @@ export default function App() {
         <Route path="/workspace-signin" element={<ManualLogin />}></Route>
         <Route path="/confirm-email" element={<ConfirmEmail />}></Route>
         <Route path="/dashboard" element={<Dashboard />}></Route>
+        <Route path="*" element={<Navigate to="/404" />}></Route>
       </Routes>
     </BrowserRouter>
   );

@@ -1,8 +1,4 @@
-const { DataTypes } = require("sequelize");
-const Otp = require("../otps/otpModel");
-const Workspace = require("../workspace/workspaceModel");
-
-module.exports = (sequelize) => {
+module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
     "user",
     {
@@ -29,14 +25,9 @@ module.exports = (sequelize) => {
     },
     { underscored: true }
   );
-  User.associate = function () {
-    User.hasOne(Otp, { foreignKey: "userId", as: "Otp" });
-  };
-  User.associate = () => {
-    User.belongsTo(Workspace, {
-      foreignKey: "workspaceId",
-      sourceKey: "id",
-    });
+  User.associate = function (models) {
+    models.User.hasone(models.Otp, { foreignKey: "userId", as: "Otp" });
+    models.User.belongsto(models.Workspace);
   };
 
   return User;

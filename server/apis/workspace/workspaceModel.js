@@ -1,7 +1,4 @@
-const { DataTypes } = require("sequelize");
-const User = require("../users/userModel");
-
-module.exports = (sequelize) => {
+module.exports = function (sequelize, DataTypes) {
   const Workspace = sequelize.define(
     "workspace",
     {
@@ -16,8 +13,11 @@ module.exports = (sequelize) => {
     },
     { underscored: true }
   );
-  Workspace.associate = (models) => {
-    Workspace.hasMany(models.User, { foreignKey: "workspaceId", as: "Users" });
+  Workspace.associate = function (models) {
+    models.Workspace.hasmany(models.User, {
+      foreignKey: "workspaceId",
+      as: "user",
+    });
   };
   return Workspace;
 };

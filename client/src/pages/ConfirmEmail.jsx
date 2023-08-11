@@ -47,9 +47,14 @@ const ConfirmEmail = (props) => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
+  const [timer, setTimer] = useState(180); // resend otp timer
+  var obj = document.getElementById("counter");
+  let counterStorage = localStorage.getItem("counter");
+  if (counterStorage) obj.innerHTML = counterStorage;
   const [values, setValues] = useState({
     token: "",
   });
+
   const nav = useNavigate();
   const handleSubmit = async () => {
     var userId = localStorage.getItem("userId");
@@ -103,8 +108,6 @@ const ConfirmEmail = (props) => {
     const { key } = event;
     const [fieldName, fieldIndex] = name.split("-");
     let fieldIntIndex = parseInt(fieldIndex, 10);
-    const ctrlKey = 17; // for windows
-    const cmdKey = 91; // for mac
     const vKey = 86;
     if (key === "Backspace") {
       const previousInputField = document.querySelector(
@@ -140,6 +143,22 @@ const ConfirmEmail = (props) => {
       handleSubmit();
     }
   }, [values]);
+
+  const id = useRef(null);
+  const clear = () => {
+    window.clearInterval(id.current);
+  };
+  useEffect(() => {
+    id.current = window.setInterval(() => {
+      setTimer((time) => time - 1);
+    }, 1000);
+    return clear();
+  }, [timer]);
+  useEffect(() => {
+    if (timer === 0) {
+      clear();
+    }
+  }, [timer]);
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -237,6 +256,13 @@ const ConfirmEmail = (props) => {
           {error && (
             <Typography color={"red"}>
               Otp verification failed! Please try again
+            </Typography>
+          )}
+          {timer > 0 ? (
+            <Typography>Your OTP will expire in {timer} seconds</Typography>
+          ) : (
+            <Typography>
+              Your OTP has been expired. Please issue new OTP
             </Typography>
           )}
           <Stack direction={"row"} spacing={3} marginTop={4}>

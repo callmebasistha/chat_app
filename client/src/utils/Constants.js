@@ -5,4 +5,5 @@ export const URL = {
   login: `${serverlocation}/api/login`,
   confirmEmail: `${serverlocation}/api/confirm-email`,
   verifyOtp: `${serverlocation}/api/verify-otp`,
+  resendOtp: `${serverlocation}/api/resend-otp`,
 };

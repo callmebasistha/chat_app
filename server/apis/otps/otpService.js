@@ -13,11 +13,27 @@ const insert = async (data) => {
   }
 };
 
-const verifyOtp = async (data, callBack) => {
+const resendToken = async (data, callBack) => {
   try {
+    debugger;
     const existingToken = await Otp.findOne({
       where: { userId: data.userId },
-      include: [{ all: true, nested: true }],
+      include: [{ model: db.users }],
+    }).then(async () => {
+      await Otp.destroy({ where: { userId: existingToken.userId } });
+      this.insert(data);
+    });
+    return callBack;
+  } catch (err) {
+    callBack(err);
+  }
+};
+const verifyOtp = async (data, callBack) => {
+  try {
+    debugger;
+    const existingToken = await Otp.findOne({
+      where: { userId: data.userId },
+      include: [{ model: db.users }],
     });
     console.log(existingToken);
     if (existingToken === null)
@@ -26,11 +42,11 @@ const verifyOtp = async (data, callBack) => {
       return callBack("Token is expired.", null);
     if (existingToken.token != data.token)
       return callBack("Otp verification Failed", null);
-    await Otp.destroy({ where: { userId: existingToken.userId } });
+    else await Otp.destroy({ where: { userId: existingToken.userId } });
     return callBack(null, existingToken.dataValues);
   } catch (err) {
     callBack(err);
   }
 };
 
-module.exports = { insert, verifyOtp };
+module.exports = { insert, verifyOtp, resendToken };

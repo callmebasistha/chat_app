@@ -13,7 +13,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // route configs
-app.use("/api", router);
 //test
 app.get("/", (req, res) => {
   res.json({ message: "response from server" });
@@ -22,3 +21,5 @@ app.get("/", (req, res) => {
 app.listen(process.env.SERVER_PORT, () => {
   console.log(`server started on port ${process.env.SERVER_PORT}`);
 });
+app.use("/api", router);
+console.log("router initiated");

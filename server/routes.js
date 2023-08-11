@@ -7,6 +7,7 @@ router.post("/register", UserController.insert);
 
 //otp routes
 router.post("/verify-otp", OtpController.verifyOtp);
+router.post("/resend-otp", OtpController.resendToken);
 
 //workspace routes
 //workspaceUser routes
