@@ -23,9 +23,10 @@ export default function App() {
         <Route path="/login" element={<Login />}></Route>
         <Route path="/workspace-signin" element={<ManualLogin />}></Route>
         <Route path="/confirm-email" element={<ConfirmEmail />}></Route>
+        <Route path="/dashboard" element={<Dashboard />}></Route>
       </Routes>
     </BrowserRouter>
   );
 }
-const General = Loadable(lazy(() => import("./pages/General")));
+const Dashboard = Loadable(lazy(() => import("./pages/Dashboard")));
 const Page404 = Loadable(lazy(() => import("./pages/Page404")));

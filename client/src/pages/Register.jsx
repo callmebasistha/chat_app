@@ -53,6 +53,8 @@ const Register = () => {
       .then(
         function (response) {
           if (response.data.success) {
+            debugger;
+            localStorage.setItem("userId", response.data.data.id);
             nav("/confirm-email");
           }
         },

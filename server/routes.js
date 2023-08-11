@@ -1,6 +1,13 @@
-const userRoutes = require("./apis/users/userRouters");
-const otpRoutes = require("./apis/otps/otpRoutes");
+const router = require("express").Router();
+const UserController = require("./apis/users/userController");
+const OtpController = require("./apis/otps/otpController");
 
-const router = [userRoutes, otpRoutes];
+//user routes
+router.post("/register", UserController.insert);
 
+//otp routes
+router.post("/verify-otp", OtpController.verifyOtp);
+
+//workspace routes
+//workspaceUser routes
 module.exports = router;

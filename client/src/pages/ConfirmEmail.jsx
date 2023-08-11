@@ -1,4 +1,3 @@
-import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -12,10 +11,18 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+
 import axios from "axios";
 import { URL } from "../utils/Constants";
-import { Divider, IconButton, Stack } from "@mui/material";
+import {
+  CircularProgress,
+  Divider,
+  IconButton,
+  Paper,
+  Stack,
+} from "@mui/material";
 import logo from "../assets/images/apple-touch-icon.png";
 
 function Copyright(props) {
@@ -37,19 +44,102 @@ function Copyright(props) {
 }
 const defaultTheme = createTheme();
 const ConfirmEmail = (props) => {
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
   const [values, setValues] = useState({
-    email: "",
+    token: "",
   });
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    await axios.post(URL.ConfirmEmail, {
-      email: values.email,
-    });
+  const nav = useNavigate();
+  const handleSubmit = async () => {
+    var userId = localStorage.getItem("userId");
+    setLoading(true);
+    await axios
+      .post(URL.verifyOtp, {
+        token: values.token,
+        userId: userId,
+      })
+      .then((response) => {
+        if (response.data.success) {
+          setLoading(false);
+          setSuccess(true);
+          nav("/dashboard");
+        } else {
+          setLoading(false);
+          setError(true);
+        }
+      })
+      .catch(() => {
+        setLoading(false);
+        setError(true);
+      });
   };
-  const handelEmailChange = (event) => {
+  const handelOtpChange = (event) => {
     event.preventDefault();
-    setValues({ ...values, [event.target.name]: event.target.value });
+    const { maxLength, value, name } = event.target;
+    const [fieldName, fieldIndex] = name.split("-");
+    let fieldIntIndex = parseInt(fieldIndex, 10);
+    if (value.length >= maxLength) {
+      // It should not be last input field
+      if (fieldIntIndex <= 6) {
+        // Get the next input field using it's name
+        const nextInputField = document.querySelector(
+          `input[name=token-${fieldIntIndex + 1}]`
+        );
+        const currentInputField = document.querySelector(
+          `input[name=token-${fieldIntIndex}]`
+        );
+        currentInputField.disabled = true;
+        // If found, focus the next field
+        setValues({ token: values.token + value });
+
+        nextInputField && nextInputField.focus();
+      }
+    }
   };
+  let inputFieldValueRef = useRef("");
+  const handelKeyDown = async (event) => {
+    const { name } = event.target;
+    const { key } = event;
+    const [fieldName, fieldIndex] = name.split("-");
+    let fieldIntIndex = parseInt(fieldIndex, 10);
+    const ctrlKey = 17; // for windows
+    const cmdKey = 91; // for mac
+    const vKey = 86;
+    if (key === "Backspace") {
+      const previousInputField = document.querySelector(
+        `input[name=token-${fieldIntIndex - 1}]`
+      );
+      event.target.value = "";
+      if (previousInputField !== null) {
+        previousInputField.disabled = false;
+        setValues({
+          token: values.token.substring(0, fieldIntIndex - 2),
+        });
+        previousInputField.focus();
+      }
+    }
+    console.log(event.ctrlKey + "+" + event.key);
+    if (event.ctrlKey && event.keyCode == vKey) {
+      var copiedText = await navigator.clipboard.readText();
+      debugger;
+      for (let i = fieldIntIndex; i <= 6; i++) {
+        var inputField = document.querySelector(`input[name=token-${i}]`);
+        if (inputField != null) {
+          inputField.value = copiedText.charAt(i - 1);
+          inputField.disabled = true;
+        }
+      }
+      setValues({ token: copiedText });
+    }
+  };
+
+  useEffect(() => {
+    if (values.token.length === 6) {
+      console.log(values);
+      handleSubmit();
+    }
+  }, [values]);
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -81,101 +171,104 @@ const ConfirmEmail = (props) => {
             We’ve sent a 6-character code to callmebasistha@gmail.com. The code
             expires shortly, so please enter it soon.
           </Typography>
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
+          <Stack direction={"row"} spacing={2} marginTop={4} marginBottom={4}>
+            <TextField
+              margin="normal"
+              id="otp"
+              autoComplete="email"
+              name="token-1"
+              inputProps={{ maxLength: "1", minLength: "1" }}
+              maxLength="1"
+              minLength="1"
+              onChange={(e) => handelOtpChange(e)}
+              onKeyDown={handelKeyDown}
+              autoFocus
+            />
+            <TextField
+              margin="normal"
+              id="otp"
+              autoComplete="email"
+              name="token-2"
+              inputProps={{ maxLength: "1", minLength: "1" }}
+              onChange={(e) => handelOtpChange(e)}
+              onKeyDown={handelKeyDown}
+            />
+            <TextField
+              margin="normal"
+              id="otp"
+              autoComplete="email"
+              name="token-3"
+              inputProps={{ maxLength: "1", minLength: "1" }}
+              onChange={(e) => handelOtpChange(e)}
+              onKeyDown={handelKeyDown}
+            />
+            <Divider orientation="horizontal" />
+            <Divider orientation="horizontal" />
+            <TextField
+              margin="normal"
+              id="otp"
+              autoComplete="email"
+              name="token-4"
+              inputProps={{ maxLength: "1", minLength: "1" }}
+              onChange={(e) => handelOtpChange(e)}
+              onKeyDown={handelKeyDown}
+            />
+            <TextField
+              margin="normal"
+              id="otp"
+              autoComplete="email"
+              name="token-5"
+              inputProps={{ maxLength: "1", minLength: "1" }}
+              onChange={(e) => handelOtpChange(e)}
+              onKeyDown={handelKeyDown}
+            />
+            <TextField
+              margin="normal"
+              id="otp"
+              autoComplete="email"
+              name="token-6"
+              inputProps={{ maxLength: "1", minLength: "1" }}
+              onChange={(e) => handelOtpChange(e)}
+              onKeyDown={handelKeyDown}
+            />
+          </Stack>
+          {loading && <CircularProgress />}
+          {success && <Typography color={"green"}>Verified</Typography>}
+          {error && (
+            <Typography color={"red"}>
+              Otp verification failed! Please try again
+            </Typography>
+          )}
+          <Stack direction={"row"} spacing={3} marginTop={4}>
+            <Stack direction={"row"} alignItems={"center"}>
+              <IconButton>
+                <EmailIcon color="primary" />
+              </IconButton>
+              <Link href="https://gmail.com/" variant="body2" target="_blank">
+                <Typography>Open Gmail</Typography>
+              </Link>
+            </Stack>
+            <Stack direction={"row"} alignItems={"center"}>
+              <IconButton>
+                <EmailIcon color="primary" />
+              </IconButton>
+              <Link
+                href="https://login.live.com/"
+                variant="body2"
+                target="_blank"
+              >
+                <Typography>Open outlook</Typography>
+              </Link>
+            </Stack>
+          </Stack>
+          <Typography
+            align="center"
+            component="h1"
+            variant="body1"
             sx={{ mt: 1 }}
           >
-            <Stack direction={"row"} spacing={2} marginTop={4} marginBottom={4}>
-              <TextField
-                margin="normal"
-                id="email"
-                autoComplete="email"
-                name="email"
-                onChange={(e) => handelEmailChange(e)}
-                autoFocus
-              />
-              <TextField
-                margin="normal"
-                id="email"
-                autoComplete="email"
-                name="email"
-                onChange={(e) => handelEmailChange(e)}
-                autoFocus
-              />
-              <TextField
-                margin="normal"
-                id="email"
-                autoComplete="email"
-                name="email"
-                onChange={(e) => handelEmailChange(e)}
-                autoFocus
-              />
-              <Divider orientation="horizontal" />
-              <Divider orientation="horizontal" />
-              <TextField
-                margin="normal"
-                id="email"
-                autoComplete="email"
-                name="email"
-                onChange={(e) => handelEmailChange(e)}
-                autoFocus
-              />
-              <TextField
-                margin="normal"
-                id="email"
-                autoComplete="email"
-                name="email"
-                onChange={(e) => handelEmailChange(e)}
-                autoFocus
-              />
-              <TextField
-                margin="normal"
-                id="email"
-                autoComplete="email"
-                name="email"
-                onChange={(e) => handelEmailChange(e)}
-                autoFocus
-              />
-            </Stack>
-            <Stack
-              direction={"row"}
-              display={"flex"}
-              justifyContent={"space-between"}
-              marginLeft={4}
-              marginRight={4}
-            >
-              <Stack direction={"row"} alignItems={"center"}>
-                <IconButton>
-                  <EmailIcon color="primary" />
-                </IconButton>
-                <Link href="https://gmail.com/" variant="body2" target="_blank">
-                  <Typography>Open Gmail</Typography>
-                </Link>
-              </Stack>
-              <Stack direction={"row"} alignItems={"center"}>
-                <IconButton>
-                  <EmailIcon color="primary" />
-                </IconButton>
-                <Link
-                  href="https://login.live.com/"
-                  variant="body2"
-                  target="_blank"
-                >
-                  <Typography>Open outlook</Typography>
-                </Link>
-              </Stack>
-            </Stack>
-            <Typography
-              align="center"
-              component="h1"
-              variant="body1"
-              sx={{ mt: 1 }}
-            >
-              Can’t find your code? Check your spam folder!
-            </Typography>
-          </Box>
+            Can’t find your code? Check your spam folder!
+          </Typography>
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>

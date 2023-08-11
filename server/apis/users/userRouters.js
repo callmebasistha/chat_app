@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { insert } = require("./userController");
+const userController = require("./userController");
 
 router.post("/register", insert);
 

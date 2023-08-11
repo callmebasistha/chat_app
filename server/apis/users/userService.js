@@ -449,7 +449,7 @@ const insert = async (data, callBack) => {
     otpService.insert(otpData);
     emailSender.sendMail(message);
     t.commit();
-    return callBack(null,   );
+    return callBack(null, insertedUser.dataValues);
   } catch (error) {
     callBack(error);
   }

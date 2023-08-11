@@ -1,4 +1,5 @@
 const { DataTypes } = require("sequelize");
+const User = require("../users/userModel");
 
 module.exports = (sequelize) => {
   const Otp = sequelize.define(
@@ -22,5 +23,8 @@ module.exports = (sequelize) => {
     { underscored: true }
   );
   Otp.removeAttribute("id");
+  Otp.associate = function () {
+    Otp.belongsTo(User, { foreignKey: "user_id", sourceKey: "id" });
+  };
   return Otp;
 };
