@@ -18,11 +18,16 @@ const resendToken = async (data, callBack) => {
     debugger;
     const existingToken = await Otp.findOne({
       where: { userId: data.userId },
-      include: [{ model: db.users }],
-    }).then(async () => {
-      await Otp.destroy({ where: { userId: existingToken.userId } });
-      this.insert(data);
     });
+    if (existingToken != null) {
+      await Otp.destroy({ where: { userId: existingToken.userId } });
+      let otpText = "";
+      helper.generateOTP((otp) => {
+        otpText = otp;
+      });
+      data.token = otpText;
+      insert(data);
+    }
     return callBack;
   } catch (err) {
     callBack(err);

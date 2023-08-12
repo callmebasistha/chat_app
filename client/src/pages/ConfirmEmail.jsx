@@ -47,7 +47,7 @@ const ConfirmEmail = (props) => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
-  const [timer, setTimer] = useState(180); // resend otp timer
+  const [timer, setTimer] = useState(10); // resend otp timer
   var obj = document.getElementById("counter");
   let counterStorage = localStorage.getItem("counter");
   if (counterStorage) obj.innerHTML = counterStorage;
@@ -77,6 +77,19 @@ const ConfirmEmail = (props) => {
       .catch(() => {
         setLoading(false);
         setError(true);
+      });
+  };
+  const onClickResendOtp = async () => {
+    var userId = localStorage.getItem("userId");
+    await axios
+      .post(URL.resendOtp, {
+        token: values.token,
+        userId: userId,
+      })
+      .then(() => {
+        setLoading(false);
+        setTimer(10);
+        clear();
       });
   };
   const handelOtpChange = (event) => {
@@ -122,7 +135,6 @@ const ConfirmEmail = (props) => {
         previousInputField.focus();
       }
     }
-    console.log(event.ctrlKey + "+" + event.key);
     if (event.ctrlKey && event.keyCode == vKey) {
       var copiedText = await navigator.clipboard.readText();
       debugger;
@@ -139,25 +151,28 @@ const ConfirmEmail = (props) => {
 
   useEffect(() => {
     if (values.token.length === 6) {
-      console.log(values);
       handleSubmit();
     }
   }, [values]);
 
-  const id = useRef(null);
-  const clear = () => {
+  const id = useRef(0);
+  const clear = function () {
     window.clearInterval(id.current);
   };
   useEffect(() => {
-    id.current = window.setInterval(() => {
-      setTimer((time) => time - 1);
-    }, 1000);
-    return clear();
+    id.current = window.setInterval(
+      () => {
+        setTimer((time) => time - 1);
+      },
+      1000,
+      clear()
+    );
   }, [timer]);
   useEffect(() => {
     if (timer === 0) {
       clear();
     }
+    console.log(timer);
   }, [timer]);
 
   return (
@@ -221,8 +236,6 @@ const ConfirmEmail = (props) => {
               onChange={(e) => handelOtpChange(e)}
               onKeyDown={handelKeyDown}
             />
-            <Divider orientation="horizontal" />
-            <Divider orientation="horizontal" />
             <TextField
               margin="normal"
               id="otp"
@@ -254,16 +267,16 @@ const ConfirmEmail = (props) => {
           {loading && <CircularProgress />}
           {success && <Typography color={"green"}>Verified</Typography>}
           {error && (
-            <Typography color={"red"}>
+            <Typography color={"red"} cursor={"pointer"}>
               Otp verification failed! Please try again
             </Typography>
           )}
           {timer > 0 ? (
             <Typography>Your OTP will expire in {timer} seconds</Typography>
           ) : (
-            <Typography>
-              Your OTP has been expired. Please issue new OTP
-            </Typography>
+            <Link sx={{ cursor: "pointer" }} onClick={onClickResendOtp}>
+              Resend Token
+            </Link>
           )}
           <Stack direction={"row"} spacing={3} marginTop={4}>
             <Stack direction={"row"} alignItems={"center"}>
