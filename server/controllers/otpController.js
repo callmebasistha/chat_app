@@ -1,4 +1,4 @@
-const otpService = require("./otpService");
+const otpService = require("../services/otpService");
 let insert = (req, res) => {
   const body = req.body;
   otpService.insert(body, (result) => {

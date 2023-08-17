@@ -2,8 +2,15 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const router = require("./routes");
+const db = require("./models");
 
 //cors config
+// sequelize config
+db.sequelize.sync({ force: false, logging: console.log }).then(() => {
+  app.listen(3001, () => {
+    console.log(`server started on port ${3001}`);
+  });
+});
 let corsOption = {
   origin: "http://localhost:3000",
 };
@@ -12,14 +19,9 @@ app.use(cors(corsOption));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// route configs
 //test
 app.get("/", (req, res) => {
   res.json({ message: "response from server" });
-});
-
-app.listen(process.env.SERVER_PORT, () => {
-  console.log(`server started on port ${process.env.SERVER_PORT}`);
 });
 app.use("/api", router);
 console.log("router initiated");

@@ -13,8 +13,8 @@ module.exports = function (sequelize, DataTypes) {
     },
     { underscored: true }
   );
-  Workspace.associate = function (models) {
-    models.Workspace.hasmany(models.User, {
+  Workspace.associate = (models) => {
+    Workspace.hasMany(models.user, {
       foreignKey: "workspaceId",
       as: "user",
     });

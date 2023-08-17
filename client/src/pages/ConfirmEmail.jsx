@@ -13,6 +13,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+// import OTPInput from "otp-input";
 
 import axios from "axios";
 import { URL } from "../utils/Constants";
@@ -46,7 +47,7 @@ const defaultTheme = createTheme();
 const ConfirmEmail = (props) => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState("");
   const [timer, setTimer] = useState(10); // resend otp timer
   var obj = document.getElementById("counter");
   let counterStorage = localStorage.getItem("counter");
@@ -212,8 +213,6 @@ const ConfirmEmail = (props) => {
               autoComplete="email"
               name="token-1"
               inputProps={{ maxLength: "1", minLength: "1" }}
-              maxLength="1"
-              minLength="1"
               onChange={(e) => handelOtpChange(e)}
               onKeyDown={handelKeyDown}
               autoFocus

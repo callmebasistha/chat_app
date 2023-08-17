@@ -7,13 +7,13 @@ module.exports = (sequelize, DataTypes) => {
       middleName: DataTypes.STRING,
       lastName: DataTypes.STRING,
       dateOfBirth: DataTypes.STRING,
-      workspaceId: {
-        type: DataTypes.INTEGER,
-        references: {
-          model: "workspace",
-          key: "id",
-        },
-      },
+      // workspaceId: {
+      //   type: DataTypes.INTEGER,
+      //   references: {
+      //     model: "workspace",
+      //     key: "id",
+      //   },
+      // },
       isAdmin: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
@@ -25,9 +25,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     { underscored: true }
   );
-  User.associate = function (models) {
-    models.User.hasone(models.Otp, { foreignKey: "userId", as: "Otp" });
-    models.User.belongsto(models.Workspace);
+  User.associate = (models) => {
+    User.hasOne(models.otp, { foreignKey: "userId" });
+    User.belongsTo(models.workspace);
   };
 
   return User;

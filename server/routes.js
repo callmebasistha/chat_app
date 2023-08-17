@@ -1,6 +1,6 @@
 const router = require("express").Router();
-const UserController = require("./apis/users/userController");
-const OtpController = require("./apis/otps/otpController");
+const UserController = require("./controllers/userController");
+const OtpController = require("./controllers/otpController");
 
 //user routes
 router.post("/register", UserController.insert);

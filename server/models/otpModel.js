@@ -5,13 +5,13 @@ module.exports = (sequelize, DataTypes) => {
       token: {
         type: DataTypes.STRING,
       },
-      userId: {
-        type: DataTypes.INTEGER,
-        references: {
-          model: "user",
-          key: "id",
-        },
-      },
+      // userId: {
+      //   type: DataTypes.INTEGER,
+      //   references: {
+      //     model: "user",
+      //     key: "id",
+      //   },
+      // },
       expiry: DataTypes.DATE,
     },
     {
@@ -20,8 +20,12 @@ module.exports = (sequelize, DataTypes) => {
     { underscored: true }
   );
   Otp.removeAttribute("id");
-  Otp.associate = function (models) {
-    models.Otp.belongsto(models.User);
+  Otp.associate = (models) => {
+    Otp.belongsTo(models.user, {
+      foreignKey: {
+        allowNull: false,
+      },
+    });
   };
   return Otp;
 };

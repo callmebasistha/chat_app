@@ -1,4 +1,4 @@
-const userService = require("./userService");
+const userService = require("../services/userService");
 
 let insert = (req, res) => {
   const body = req.body;

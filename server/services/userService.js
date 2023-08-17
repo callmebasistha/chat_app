@@ -1,16 +1,14 @@
-const db = require("../../config/sequelizeConfig");
-const emailSender = require("../../config/emailSender");
-const helper = require("../../config/helper");
-const otpService = require("../otps/otpService");
-const sequelize = require("../../config/database");
+const db = require("../models");
+const emailSender = require("../config/emailSender");
+const helper = require("../config/helper");
+const otpService = require("./otpService");
 
-//get user obj
-const User = db.users;
+const { user } = require("../models");
 
 const insert = async (data, callBack) => {
-  const t = await sequelize.transaction();
+  const t = await db.sequelize.transaction();
   try {
-    let insertedUser = await User.create(data, { transaction: t });
+    let insertedUser = await user.create(data, { transaction: t });
     let insertedUserId = insertedUser.dataValues.id;
     let otpText = "";
     helper.generateOTP((otp) => {
@@ -448,7 +446,7 @@ const insert = async (data, callBack) => {
     };
     otpService.insert(otpData);
     emailSender.sendMail(message);
-    t.commit();
+    await t.commit();
     return callBack(null, insertedUser.dataValues);
   } catch (error) {
     callBack(error);
