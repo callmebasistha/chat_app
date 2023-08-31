@@ -1,4 +1,4 @@
-const serverlocation = "http://127.0.0.1:3001";
+const serverlocation = "http://127.0.0.1:3002";
 
 export const URL = {
   register: `${serverlocation}/api/register`,
@@ -6,4 +6,5 @@ export const URL = {
   confirmEmail: `${serverlocation}/api/confirm-email`,
   verifyOtp: `${serverlocation}/api/verify-otp`,
   resendOtp: `${serverlocation}/api/resend-otp`,
+  createWorkspace: `${serverlocation}/api/create-workspace`,
 };

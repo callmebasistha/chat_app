@@ -7,18 +7,6 @@ module.exports = (sequelize, DataTypes) => {
       middleName: DataTypes.STRING,
       lastName: DataTypes.STRING,
       dateOfBirth: DataTypes.STRING,
-      // workspaceId: {
-      //   type: DataTypes.INTEGER,
-      //   references: {
-      //     model: "workspace",
-      //     key: "id",
-      //   },
-      // },
-      isAdmin: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
-      },
     },
     {
       tableName: "user",
@@ -27,7 +15,14 @@ module.exports = (sequelize, DataTypes) => {
   );
   User.associate = (models) => {
     User.hasOne(models.otp, { foreignKey: "userId" });
-    User.belongsTo(models.workspace);
+    User.belongsToMany(models.workspace, {
+      through: "workspaceUser",
+      as: "workspace",
+    });
+    User.belongsToMany(models.channel, {
+      through: "channelUser",
+      as: "channel",
+    });
   };
 
   return User;

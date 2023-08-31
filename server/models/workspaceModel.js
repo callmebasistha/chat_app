@@ -14,8 +14,8 @@ module.exports = function (sequelize, DataTypes) {
     { underscored: true }
   );
   Workspace.associate = (models) => {
-    Workspace.hasMany(models.user, {
-      foreignKey: "workspaceId",
+    Workspace.belongsToMany(models.user, {
+      through: "workspaceUser",
       as: "user",
     });
   };

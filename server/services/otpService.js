@@ -15,7 +15,6 @@ const insert = async (data) => {
 
 const resendToken = async (data, callBack) => {
   try {
-    debugger;
     const existingToken = await otp.findOne({
       where: { userId: data.userId },
     });

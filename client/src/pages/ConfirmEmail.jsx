@@ -48,7 +48,7 @@ const ConfirmEmail = (props) => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
-  const [timer, setTimer] = useState(10); // resend otp timer
+  const [timer, setTimer] = useState(180); // resend otp timer
   var obj = document.getElementById("counter");
   let counterStorage = localStorage.getItem("counter");
   if (counterStorage) obj.innerHTML = counterStorage;
@@ -69,7 +69,11 @@ const ConfirmEmail = (props) => {
         if (response.data.success) {
           setLoading(false);
           setSuccess(true);
-          nav("/dashboard");
+          // localStorage.setItem(
+          //   "workspaceId",
+          //   response.data.data.user.workspaceId
+          // );
+          nav("/get-started");
         } else {
           setLoading(false);
           setError(true);
@@ -81,6 +85,8 @@ const ConfirmEmail = (props) => {
       });
   };
   const onClickResendOtp = async () => {
+    setLoading(true);
+    setTimer(180);
     var userId = localStorage.getItem("userId");
     await axios
       .post(URL.resendOtp, {
@@ -138,7 +144,6 @@ const ConfirmEmail = (props) => {
     }
     if (event.ctrlKey && event.keyCode == vKey) {
       var copiedText = await navigator.clipboard.readText();
-      debugger;
       for (let i = fieldIntIndex; i <= 6; i++) {
         var inputField = document.querySelector(`input[name=token-${i}]`);
         if (inputField != null) {
@@ -175,6 +180,10 @@ const ConfirmEmail = (props) => {
     }
     console.log(timer);
   }, [timer]);
+  let userId = localStorage.getItem("userId");
+  useEffect(() => {
+    !userId && nav("/register");
+  });
 
   return (
     <ThemeProvider theme={defaultTheme}>
