@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const userRoutes = require("./apis/users/userRouters")
 const app = express();
 const router = require("./routes");
 const db = require("./models");
@@ -21,9 +22,12 @@ app.use(express.json());
 // app.use(express.static(path.resolve(__dirname, "../client/build")));
 app.use(express.urlencoded({ extended: true }));
 
-//test
-app.get("/", (req, res) => {
-  res.json({ message: "response from server" });
+app.use("/api", userRoutes)
+
+
+const server = app.listen(process.env.SERVER_PORT,()=>{
+  console.log(server.address.name);
+console.log(`server started on port ${process.env.SERVER_PORT}`);
 });
 // app.get("*", (req, res) => {
 //   res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));

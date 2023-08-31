@@ -197,8 +197,10 @@ const ConfirmEmail = (props) => {
             alignItems: "center",
           }}
         >
-          <Stack direction={"row"} alignItems={"center"} spacing={1} margin={1}>
-            <img src={logo} style={{ width: "42px" }} />
+          <Stack direction={"row"} alignItems={"center"}>
+            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+              <LockOutlinedIcon />
+            </Avatar>
             <Typography component="h1" variant="h6">
               Bolamna
             </Typography>
